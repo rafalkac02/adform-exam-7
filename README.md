@@ -4,9 +4,8 @@ Table of contents
 1. [About The Project](#about-the-project)
     - [Adform's exam](#adforms-exam)
     - [Project description](#project-description)
-2. [Getting Started](#getting-started)
+2. [My thinking process](#my=-thinking-process)
 3. [Usage](#usage)
-4. [Troubleshooting](#troubleshooting)
 
 
 ## About the Project
@@ -27,22 +26,50 @@ This project is a part of a final exam after 3-months of Scala Academy at [Adfor
 </details>
 
 ### Project description
-The project does XYZ.
+- **task description**
 
-## Getting Started
-The project is built with:
-- Scala
-- sbt
+Fix a function that should return the middle list element. In case of list having even number of elements the left middle element should be returned, e.g. [1,2,3,4] should return 2
+Include algorithm explanation
+
+- **code** (to be repaired)
+```scala
+def findMiddleElement[T](xs: List[T]): Option[T] = {
+   @tailrec
+   def loop(ys: List[T], acc: List[T], cnt: Int): Option[T] = {
+      ys match {
+         case head :: tail if cnt % 2 == 0 => loop(tail, acc.tail, cnt + 1)
+         case _ :: tail => loop(tail, acc, cnt + 1)
+         case Nil => acc.headOption
+      }
+   }
+   loop(xs, xs, 0)
+}
+```
+
+## My thinking process
+The code snippet I have fixed suggest that we need to pass two lists as parameters to recursive function. I did not change the shape of this function, but fixed the logic.
+
+To get the middle element without using built-in functions, we use two lists and a counter. We drop the first element. Every time loop() is called we drop first element from one list. The other list is reduced every second time.
+
+This way, as soon as we finish looping over first list, the head of the second list is the middle element. Taking first element from the left, solves the problem with lists of even length. It meets the task's requirements. 
+
+
+My solution:
+```scala
+def findMiddleElement[T](xs: List[T]): Option[T] = {
+ @tailrec
+ def loop(ys: List[T], acc: List[T], cnt: Int): Option[T] = {
+   ys match {
+     case head :: Nil => acc.headOption
+     case head :: tail if cnt % 2 == 0 => loop(tail, acc, cnt + 1)
+     case _ :: tail => loop(tail, acc.tail, cnt + 1)
+   }
+ }
+ loop(xs, xs, 0)
+}
+```
 
 ## Usage
 - Clone the repository to the chosen directory with `git clone https://github.com/rafalkac02/adform-exam-1` command.
 - Run the application with `sbt run` command in the same directory
 - Test the application with `sbt test` command
-
-
-## Troubleshooting
-- Make sure that your project does not contain outdated project files using:
-```
-sbt clean
-```
-- Make sure that your environment variables are set properly, including `JAVA_HOME`
